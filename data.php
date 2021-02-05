@@ -1,5 +1,27 @@
 <?php include('server.php') ?>
 <?php 
+	if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+		$update = true;
+        $record = mysqli_query($db, "SELECT * FROM employee WHERE id=$id");
+        // echo $record;
+      
+		if (count($record) == 1 ) {
+			$n = mysqli_fetch_array($record);
+            $status = $n['status'];
+            $firstname = $n['firstname'];
+            $lastname = $n['lastname'];
+            $department = $n['department'];
+
+            $dep = explode(',', $department);
+
+            // print_r($dep);exit;     
+                   $address = $n['address'];
+            $gender = $n['gender'];
+		}
+	}
+?>
+<?php 
   session_start(); 
 
   if (!isset($_SESSION['username'])) {
@@ -12,21 +34,7 @@
   	header("location: login.php");
   }
 ?>  
-<?php
- $status = $_POST['status'];
-//  $firstname = $_POST['firstname'];
-//  $lastname = $_POST['lastname'];
-//  echo $department = $_POST['department'];
-//  $address = $_POST['address'];
-//  $gender = $_POST['gender'];
-//  echo $status."teest";
 
-?>
-<?php 
-
-echo $_SESSION["operation"];
-
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -188,40 +196,48 @@ form, .content {
 
     <label for="status">Choose a status:</label>
   <select name="status" id="drop" >
-    <option value="enable"  <?php if($_SESSION['status']=="enable"){echo "selected";}?>>Enable</option>
-    <option value="disable"  <?php if($_SESSION['status']=="disable"){echo "selected";}?> >Disable</option>
+    <option value="enable"  <?php if($status =="enable"){echo "selected";}?>>Enable</option>
+    <option value="disable"  <?php if($status =="disable"){echo "selected";}?> >Disable</option>
   </select><br><br>
 
     <label for="First Name"><b>First Name</b></label>
-    <input type="text" placeholder="First Name" name="firstname"  id="firstname_editForm" value="<?php echo $_SESSION["firstname"];
- ?>"required>
+    <input type="text" placeholder="First Name" name="firstname"  value="<?php echo $firstname; ?>" required>
+ 
 
     <label for="Last Name"><b>Last Name</b></label>
-	<input type="text" placeholder="Last Name" name="lastname" id="lastname_editForm" value="<?php  echo $_SESSION["lastname"]; ?>"required>
+	<input type="text" placeholder="Last Name" name="lastname" value="<?php echo $lastname; ?>" required>
 	
   <p><label for="Department"><b>Please select Department:</b></label></p>
-  <input type="checkbox" id="vehicle1" name="department" value="opencart" <?php if($_SESSION['department']=="opencart"){echo "checked";}?> >
-  <label for="Opencart"> Opencart</label><br>
-  <input type="checkbox" id="vehicle2" name="department" value="mgento" <?php if($_SESSION['department']=="mgento"){echo "checked";}?>>
-  <label for="Mgento"> Mgento</label><br>
-  <input type="checkbox" id="vehicle3" name="department" value="sopify" <?php if($_SESSION['department']=="sopify"){echo "checked";}?>>
-  <label for="sopify"> Sopify</label><br><br> 
+  
+  <input type="checkbox" id="department1" name="department[]"  value="opencart" <?php if(in_array('opencart',$dep)){echo "checked";}?> >
+  <label for="department1"> Opencart</label><br>
+  <input type="checkbox" id="department2" name="department[]" value="mgento" <?php if(in_array('mgento',$dep)){echo "checked";}?> >
+  <label for="department2"> Mgento</label><br>
+  <input type="checkbox" id="department3" name="department[]" value="sopify" <?php if(in_array('sopify',$dep)){echo "checked";}?> >
+  <label for="department3"> Sopify</label><br><br> 
+
+
 	
 	
 	<label for="Address"><b>Address</b></label>
-    <input type="text" placeholder="Address" name="address" id="address_editForm" value="<?php echo $_SESSION["address"]; ?>"required>
+    <input type="text" placeholder="Address" name="address" id="address_editForm" value="<?php echo $address; ?>"required>
 
     <p><b>Please select your gender:</b></p>
-  <input type="radio" id="male" name="gender" value="male" <?php if($_SESSION['gender']=="male"){echo "checked";}?>>
+  <input type="radio" id="male" name="gender" value="male" <?php if($gender == "male"){echo "checked";}?>>
   <label for="male">Male</label><br>
-  <input type="radio" id="female" name="gender" value="female" <?php if($_SESSION['gender']=="female"){echo "checked";}?>>
+  <input type="radio" id="female" name="gender" value="female" <?php if($gender=="female"){echo "checked";}?>>
   <label for="female">Female</label><br>
-  <input type="radio" id="other" name="gender" value="other" <?php if($_SESSION['gender']=="others"){echo "checked";}?>>
+  <input type="radio" id="other" name="gender" value="other" <?php if($gender =="other"){echo "checked";}?>>
   <label for="other">Other</label>
   
-  <span hidden id="operation"><?php echo $_SESSION['operation'] ?></span>
+  <input type="hidden" name="id" value="<?php echo $id; ?>">
 
-    <button type="save" class="btn" name="saveemployee">Save</button>
+    <!-- <button type="save" class="btn" name="saveemployee">Save</button> -->
+    <?php if ($update == true): ?>
+	<button class="btn" type="submit" name="update" style="background: #556B2F;" >update</button>
+    <?php else: ?>
+        <button class="btn" type="submit" name="saveemployee" >Save</button>
+    <?php endif ?>
   
   </form>
 </div> 
@@ -231,9 +247,11 @@ form, .content {
 
 
 
+
 		
 
     </body>
 </html>
 
 
+<!-- <span hidden id="operation">php echo $_SESSION['operation'] </span> -->

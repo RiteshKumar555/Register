@@ -96,62 +96,52 @@ if (isset($_POST['saveemployee'])) {
     // receive all input values from the form
     $firstname = mysqli_real_escape_string($db, $_POST['firstname']);
     $lastname = mysqli_real_escape_string($db, $_POST['lastname']);
-    $department = mysqli_real_escape_string($db, $_POST['department']);
+    // $department = mysqli_real_escape_string($db, $_POST['department[]']);
+   
     $address = mysqli_real_escape_string($db, $_POST['address']);
     $gender = mysqli_real_escape_string($db, $_POST['gender']);
     $status = $_POST['status'];
+    $checkbox1=$_POST['department'];  
+    $chk="";  
+    foreach($checkbox1 as $chk1)  
+       {  
+          $chk .= $chk1.",";  
+       }  
    
-  //  echo $firstname;
-  //  echo $lastname;
-  //  echo $department;
-  //  echo $address;
-  //  echo $gender;
-  //  echo $status;
 
-  //  echo $_SESSION['operation'];
 
-   if($_SESSION['operation']=="edit"){ $addemployee="UPDATE employee set firstname='" . $firstname . "', lastname='" . $lastname. "', department='". $department."', address='" . $address . "', gender= '" . $gender . "', status='" . $status ."' WHERE id='" . $_SESSION['userid'] . "'";
-  //  echo $addemployee;
+    $addemployee = "INSERT INTO employee (firstname, lastname, department, address, gender, status, loginuser) 
+    VALUES('$firstname', '$lastname', '$chk', '$address', '$gender', '$status'   ,'".$_SESSION['username']."')";
     mysqli_query($db, $addemployee);
-    $_SESSION['operation']="add";}else{$addemployee= "INSERT INTO employee (firstname, lastname, department, address, gender, status, loginuser) 
-    VALUES('$firstname', '$lastname', '$department', '$address', '$gender', '$status'   ,'".$_SESSION['username']."')";
-mysqli_query($db, $addemployee);} 
-// $_SESSION["operation"]="add";
-
-$_SESSION["status"]="";
-$_SESSION["firstname"]="";
-$_SESSION["lastname"]="";
-$_SESSION["address"]="";
-$_SESSION["department"]="";
-$_SESSION["gender"]="";
-$_SESSION["userid"]="";
-
-
-
-//     $addemployee = "INSERT INTO employee (firstname, lastname, department, address, gender, status, loginuser) 
-//     VALUES('$firstname', '$lastname', '$department', '$address', '$gender', '$status'   ,'".$_SESSION['username']."')";
-// mysqli_query($db, $addemployee);
-//     header('location: index.php');  
-
-// }
-// if(isset($_POST['editemployee'])){
-//   //  echo "session".$_SESSION['id'];
-//     $firstname =  $_POST['firstname'];
-//     $lastname =  $_POST['lastname'];
-//      $department =  $_POST['department'];
-//      $address =  $_POST['address'];
-//      $gender =  $_POST['gender'];
-//      $status =  $_POST['status'];
-//      $id =  $_POST['id'];
-
-//      $sql = "UPDATE employee set firstname='" . $_POST['firstname'] . "', lastname='" . $_POST['lastname'] . "', department='". $_POST['department']."', address='" . $_POST['address'] . "', gender= '" . $_POST['gender'] . "', status='" . $_POST['status'] ."' WHERE id='" . $_POST['id'] . "'";
-//      $result=mysqli_query($db, $sql);
-
-
-
-   
-
-  unset($_SESSION['operation']);
+    header('location: index.php');
   
 
+}
+if (isset($_POST['update'])) {
+	$id = $_POST['id'];
+	$status = $_POST['status'];
+  $firstname = $_POST['firstname'];
+  $lastname = $_POST['lastname'];
+  $department = $_POST['department'];
+  $address = $_POST['address'];
+  $gender = $_POST['gender'];
+  
+
+
+	mysqli_query($db, "UPDATE employee SET status='$status', firstname='$firstname' , lastname='$lastname' , department='$department'
+                        , address='$address' , gender='$gender' WHERE id=$id");
+	$_SESSION['message'] = "Address updated!"; 
+	header('location: index.php');
+}
+
+if (isset($_POST['sub_emp'])) {
+  
+   $dropdown = $_POST['dropdown'];
+  $date = $_POST['date'];
+
+  $sql = "INSERT INTO attendence (emp_name, date) VALUES ('$dropdown', '$date')";
+  mysqli_query($db, $sql);
+
+  
+  
 }

@@ -1,5 +1,7 @@
+
 <?php include('server.php') ?>
 <?php 
+// echo("ritesh");
   session_start(); 
 
   if (!isset($_SESSION['username'])) {
@@ -52,30 +54,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
 
 /* Button used to open the contact form - fixed at the bottom of the page */
-.open-button {
-  background-color: #555;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
-  bottom: 23px;
-  right: 28px;
-  width: 280px;
-}
 
-/* The popup form - hidden by default */
-.form-popup {
-    display: none;
-    position: absolute;
-    bottom: 0;
-    right: 584px;
-    border: 3px solid #f1f1f1;
-    z-index: 9;
-}
-
-/* Add styles to the form container */
 .form-container {
   max-width: 300px;
   padding: 10px;
@@ -98,16 +77,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 
 /* Set a style for the submit/login button */
-.form-container .btn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-}
 
 /* Add a red background color to the cancel button */
 .form-container .cancel {
@@ -132,6 +101,7 @@ form, .content {
     background: white;
     border-radius: 0px 0px 10px 10px;
 }
+
 
 
 
@@ -160,72 +130,37 @@ form, .content {
     	<p id="welcome">Welcome <strong><?php echo $_SESSION['username']; ?></strong></p><br>
     	<p id="welcome"> <a href="index.php?logout='1'" style="color: red;"><button>logout</button></a> </p>
 	<?php endif ?>
-  <a class="btn btn-primary" href="data.php" role="button" >Add</a>
-  <a class="btn btn-primary" href="attendence.php" role="button" >Attendence</a>
 	
-</div>
 
-<body>
+<form method="post" action="attendence.php">
+<label>Choose for attendence</label>
+<select id="drop" name="dropdown">
+  <option>Select employee</option>
+  <?php
+   $cdquery = "SELECT * FROM employee where loginuser='".$_SESSION['username']."'";
+            
+            $cdresult=mysqli_query($db,$cdquery);
+            
+            while ($cdrow=mysqli_fetch_array($cdresult)) {
+            $cdTitle=$cdrow["firstname"];
+                echo "<option>$cdTitle </option>";
+            
+            }
+  ?>
+</select><br><br>
 
-						<?php
-                $fetchquery = "SELECT * FROM employee where loginuser='".$_SESSION['username']."'";
-              
-                $result = mysqli_query($db, $fetchquery);
-                // echo $result;
-              ?>
-					<!-- </table>
-			</div> -->
-      <div class="table-responsive">
-					<table class="table text-center ">
-						<thead>
-		          <tr>
-              <td><b>Status</b></td>
-								<td><b>First Name</b></td>
-								<td><b>Last Name</b></td>
-								<td><b>Department</b></td>
-                <td><b>Address</b></td>
-                <td><b>Gender</b></td>
-								
-                <td></td><th colspan="2">Action</th>
-              </tr>
-	          </thead>
-	
-          <?php while ($row = mysqli_fetch_array($result)) { ?>
-            <tr>
-              <td><?php echo $row['status']; ?></td>
-              <td><?php echo $row['firstname']; ?></td>
-              <td><?php echo $row['lastname']; ?></td>
-              <td><?php echo $row['department']; ?></td>
-              <td><?php echo $row['address']; ?></td>
-              <td><?php echo $row['gender']; ?></td>
-              <td>
-                <a href="data.php?id=<?php echo $row['id']; ?>" class="edit_btn" >Edit</a>
-              </td>
-              <td>
-                <a href="delete.php?id=<?php echo $row['id']; ?>" class="del_btn">Delete</a>
-              </td>
-            </tr>
-          <?php } ?>
-        </table>
-      </div>
-		
+<label for="Select Date">Select Date:</label>
+  <input type="date" id="input-date" name="date" ><br><br>
+ 
   
-
-
-
-
-
+  <button class="btn" type="submit" name="sub_emp" >Save</button>
   
+        
+       
+</form>
+            
+</html
 
 
-	
-
-		
-
-
-		
-
-</body>
-
-</html>
+        
 

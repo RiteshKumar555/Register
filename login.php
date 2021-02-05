@@ -29,3 +29,4 @@
     </form>
     </body>
     </html>
+      <!-- <td>' . '<a href="delete.php?id='.$row["id"].'"><button>Delete</button></a>&nbsp&nbsp<input type="button" id="btnQueryString" value="Send" /></button>' . '</td> -->
