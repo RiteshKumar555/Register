@@ -139,8 +139,8 @@ if (isset($_POST['sub_emp'])) {
    $dropdown = $_POST['dropdown'];
   $date = $_POST['date'];
 
-  $sql = "INSERT INTO attendence (emp_name, date) VALUES ('$dropdown', '$date')";
-  mysqli_query($db, $sql);
+  // $sql = "INSERT INTO attendence (emp_name, date) VALUES ('$dropdown', '$date')";
+  // mysqli_query($db, $sql);
 
   
   

@@ -132,10 +132,10 @@ form, .content {
 	<?php endif ?>
 	
 
-<form method="post" action="attendence.php">
+<form method="post" action="check.php">
 <label>Choose for attendence</label>
 <select id="drop" name="dropdown">
-  <option>Select employee</option>
+    
   <?php
    $cdquery = "SELECT * FROM employee where loginuser='".$_SESSION['username']."'";
             
@@ -153,12 +153,12 @@ form, .content {
   <input type="date" id="input-date" name="date" ><br><br>
  
   
-  <button class="btn" type="submit" name="sub_emp" >Save</button>
+  <button class="btn" type="submit" name="sub_emp" value="data" >Save</button>
   
         
        
 </form>
-            
+
 </html
 
 
